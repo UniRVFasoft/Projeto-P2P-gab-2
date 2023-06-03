@@ -18,14 +18,47 @@ public class ServidorPeer {
 
         System.out.println("Cliente conectado. Aguardando mensagens...");
 
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-            System.out.println("Mensagem recebida: " + inputLine);
-            String response = processMessage(inputLine);
-            out.println(response);
-            if (response.equals("Fim da conversa")) {
-                break;
+        Thread receivingThread = new Thread(() -> {
+            try {
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    System.out.println("Mensagem recebida: " + inputLine);
+                    String response = processMessage(inputLine);
+                    out.println(response);
+                    if (response.equals("Fim da conversa")) {
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        });
+
+        Thread sendingThread = new Thread(() -> {
+            try {
+                BufferedReader consoleIn = new BufferedReader(new InputStreamReader(System.in));
+                String outputLine;
+                while (true) {
+                    outputLine = consoleIn.readLine();
+                    out.println(outputLine);
+                    if (outputLine.equals("Tchau")) {
+                        out.println("Fim da conversa");
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        receivingThread.start();
+        sendingThread.start();
+
+        try {
+            receivingThread.join();
+            sendingThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         out.close();
@@ -35,10 +68,10 @@ public class ServidorPeer {
     }
 
     private String processMessage(String message) {
-        // Implemente o processamento da mensagem aqui
-        // e retorne a resposta adequada
         if (message.equals("Tchau") || message.equals("tchau")) {
             return "Fim da conversa";
+        } else if (message.equals("Enviar mensagem")) {
+            return "Olá, Cliente! Esta é uma mensagem enviada pelo servidor.";
         } else {
             return "Resposta: " + message.toUpperCase();
         }

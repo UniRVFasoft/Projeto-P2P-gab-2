@@ -15,17 +15,43 @@ public class ClientePeer {
 
         System.out.println("Conexão estabelecida. Aguardando mensagens...");
 
-        String inputLine;
-        while (true) {
-            inputLine = consoleIn.readLine();
-            out.println(inputLine);
-
-            String response = in.readLine();
-            System.out.println("Resposta recebida: " + response);
-
-            if (response.equals("Fim da conversa")) {
-                break;
+        Thread receivingThread = new Thread(() -> {
+            try {
+                String response;
+                while ((response = in.readLine()) != null) {
+                    System.out.println("Resposta recebida: " + response);
+                    if (response.equals("Fim da conversa")) {
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        });
+
+        Thread sendingThread = new Thread(() -> {
+            try {
+                String inputLine;
+                while (true) {
+                    inputLine = consoleIn.readLine();
+                    out.println(inputLine);
+                    if (inputLine.equals("Tchau")) {
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        receivingThread.start();
+        sendingThread.start();
+
+        try {
+            receivingThread.join();
+            sendingThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         out.close();

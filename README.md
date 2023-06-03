@@ -1,2 +1,6 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/4TmAl1AC)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=11278473&assignment_repo_type=AssignmentRepo)
+# PEER TO PEER
+O código foi feito pegando como base códigos do GitHub e funcionalidades do ChatGPT.
+
+No arquivo ServidorPeer o cliente é conectado com o servidor e espera uma mensagem do mesmo,
+após a conexão ser estabelecida com o cliente, ambos podem conversar entre os pares, permitindo
+a comunicação bidirecional, e para terminar a conexão é só o cliente digitar "tchau".
